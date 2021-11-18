@@ -3,17 +3,19 @@ const app = express();
 const db = require("./src/models");
 const initRoutes = require("./src/routes/web");
 const path = require("path");
-const session = require('express-session');
-
-app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: 'hackathon',
-  cookie: { maxAge: 60000 }
-}));
+const session = require("express-session");
+const PORT = process.env.PORT || 3000;
+app.use(
+  session({
+    resave: true,
+    saveUninitialized: true,
+    secret: "hackathon",
+    cookie: { maxAge: 60000 },
+  })
+);
 
 global.__basedir = __dirname;
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "resources/static/")));
 app.use(express.urlencoded({ extended: true }));
@@ -26,7 +28,6 @@ db.sequelize.sync({ force: true }).then(() => {
   console.log("Drop and re-sync db.");
 });
 
-let port = 3000;
-app.listen(port, () => {
-  console.log(`Running at localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Running at localhost:${PORT}`);
 });
